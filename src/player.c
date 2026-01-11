@@ -188,6 +188,7 @@ Error_e PlayerMgr_add_player()
         fprintf(stderr, "Failed to allocate memory for player entity\n");
         return ERROR_OUT_OF_BOUNDS;
     }
+    memset(m_PlayerEntity.entitys[idx], 0, sizeof(EntityGeneric_t));
     m_PlayerEntity.num_player += 1;
     m_PlayerEntity.entitys[idx]->pos = nil;
     m_PlayerEntity.entitys[idx]->vel = nil;
@@ -206,7 +207,8 @@ Error_e PlayerMgr_add_player()
 **/
 Error_e PlayerMgr_remove_player()
 {
-    free(m_PlayerEntity.entitys[m_PlayerEntity.num_player]);
+    free(m_PlayerEntity.entitys[m_PlayerEntity.num_player - 1]);
+    m_PlayerEntity.entitys[m_PlayerEntity.num_player - 1] = NULL;
     m_PlayerEntity.num_player -= 1;
 
     return OK;

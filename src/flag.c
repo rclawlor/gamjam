@@ -41,6 +41,7 @@ Error_e FlagMgr_add_flag(Vector2D_t pos)
         fprintf(stderr, "Failed to allocate memory for flag entity\n");
         return ERROR_OUT_OF_BOUNDS;
     }
+    memset(m_FlagEntity.entitys[idx], 0, sizeof(EntityGeneric_t));
     m_FlagEntity.num_flags += 1;
     m_FlagEntity.entitys[idx]->pos = pos;
     m_FlagEntity.entitys[idx]->vel = nil;
@@ -60,7 +61,8 @@ Error_e FlagMgr_add_flag(Vector2D_t pos)
 **/
 Error_e FlagMgr_remove_flag()
 {
-    free(m_FlagEntity.entitys[m_FlagEntity.num_flags]);
+    free(m_FlagEntity.entitys[m_FlagEntity.num_flags - 1]);
+    m_FlagEntity.entitys[m_FlagEntity.num_flags - 1] = NULL;
     m_FlagEntity.num_flags -= 1;
 
     return OK;

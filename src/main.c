@@ -21,6 +21,7 @@
 #include "assets/sprite.h"
 #include "flag.h"
 #include "player.h"
+#include "timer.h"
 #include "window.h"
 
 
@@ -53,8 +54,19 @@ int main(int argc, char* args[])
     bool win;
     int i, j;
     char msg[64] = {};
+    bool level_finished = false;
+    Timer_t win_timer = { 0 };
+    Timer_set_now(&win_timer);
     while (!WindowMgr_should_quit())
     {
+        if (Timer_get_elapsed_time(&win_timer) > 2.0)
+        {
+            level += 1;
+            LoadLevelEntities(level);
+            win = false;
+            level_finished = false;
+        }
+
         // Update FPS
         FramerateMgr_frame_start();
         FramerateMgr_update_average();
@@ -87,7 +99,10 @@ int main(int argc, char* args[])
         }
         for (i = 0; i < m_PlayerEntity.num_player; i++)
         {
-            DRAW_entity(m_PlayerEntity.entitys[i], false);
+            if (m_PlayerEntity.entitys[i] != NULL)
+            {
+                DRAW_entity(m_PlayerEntity.entitys[i], false);
+            }
         }
 
         ANIMATION_step(&flag_animation);
@@ -97,7 +112,10 @@ int main(int argc, char* args[])
             DRAW_entity(m_FlagEntity.entitys[i], false);
         }
 
-        win = FlagMgr_check_win();
+        if (m_PlayerEntity.num_player > 0)
+        {
+            win = FlagMgr_check_win();
+        }
         if (win)
         {
             DRAW_apply_blur();
@@ -111,6 +129,13 @@ int main(int argc, char* args[])
                 FONT_SPRITE,
                 &(*FONT_PAL[0])
             );
+            if (!level_finished)
+            {
+                level_finished = true;
+                Timer_set_now(&win_timer);
+            }
+        } else {
+            Timer_set_now(&win_timer);
         }
         WindowMgr_render();
         FramerateMgr_fix_framerate();
