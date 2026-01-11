@@ -7,6 +7,7 @@
 #include <SDL_events.h>
 
 // Local
+#include "collision.h"
 #include "colour.h"
 #include "draw.h"
 #include "entity.h"
@@ -57,9 +58,10 @@ int main(int argc, char* args[])
         }
 
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
-        DRAW_map(LEVEL_1_MAP, BACKGROUND_SPRITE, BACKGROUND_PAL);
+        DRAW_map(LEVEL_1_MAP[0], BACKGROUND_SPRITE, BACKGROUND_PAL);
 
         ENTITY_update(&m_PlayerEntity.entity);
+        COLLISION_resolve_map(&m_PlayerEntity.entity, LEVEL_1_MAP[0], BACKGROUND_SPRITE);
         DRAW_entity(&m_PlayerEntity.entity, false);
 
         WindowMgr_render();
