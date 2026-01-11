@@ -14,6 +14,8 @@
 #include "framerate.h"
 #include "graphics.h"
 #include "assets/sprite.h"
+#include "assets/background.h"
+#include "assets/map.h"
 #include "player.h"
 #include "window.h"
 
@@ -55,6 +57,7 @@ int main(int argc, char* args[])
         }
 
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
+        DRAW_map(LEVEL_1_MAP, BACKGROUND_SPRITE, BACKGROUND_PAL);
 
         ENTITY_update(&m_PlayerEntity.entity);
         DRAW_entity(&m_PlayerEntity.entity, false);
