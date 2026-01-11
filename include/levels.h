@@ -1,6 +1,9 @@
 #ifndef LEVELS_H_
 #define LEVELS_H_
 
+// Standard library
+#include <stdint.h>
+
 // Local
 #include "constants.h"
 #include "vector.h"
@@ -13,7 +16,7 @@ typedef struct {
 } LevelData_t;
 
 extern const LevelData_t m_Levels[];
-
+extern uint8_t (*LevelMaps[])[2][1000];
 
 void LoadLevelEntities(int level);
 

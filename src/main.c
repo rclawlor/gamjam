@@ -17,7 +17,6 @@
 #include "framerate.h"
 #include "graphics.h"
 #include "levels.h"
-#include "assets/palette.h"
 #include "assets/sprite.h"
 #include "flag.h"
 #include "player.h"
@@ -50,8 +49,6 @@ int main(int argc, char* args[])
     SpriteAnimation_t flag_animation;
     ANIMATION_start(&flag_animation, 0.1, 2);
 
-    Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
-    // Timer_set_now(&m_PlayerEntity.entitys[1]->last_update);
     while (!WindowMgr_should_quit())
     {
         // Update FPS
@@ -67,13 +64,13 @@ int main(int argc, char* args[])
         }
 
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
-        DRAW_map(LEVEL_1_MAP[0], BACKGROUND_SPRITE, BACKGROUND_PAL);
+        DRAW_map(*LevelMaps[level], BACKGROUND_SPRITE, BACKGROUND_PAL);
 
         int i, j;
         for (i = 0; i < m_PlayerEntity.num_player; i++)
         {
             ENTITY_update(m_PlayerEntity.entitys[i]);
-            COLLISION_resolve_map(m_PlayerEntity.entitys[i], LEVEL_1_MAP[0], BACKGROUND_SPRITE);
+            COLLISION_resolve_map(m_PlayerEntity.entitys[i], *LevelMaps[level], BACKGROUND_SPRITE);
             for (j = 0; j < m_PlayerEntity.num_player; j++)
             {
                 if (j == i) {

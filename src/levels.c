@@ -1,9 +1,16 @@
+// Standard library
+#include <stdint.h>
+
 // Local
-#include "assets/palette.h"
 #include "flag.h"
 #include "graphics.h"
 #include "levels.h"
 #include "player.h"
+
+
+uint8_t (*LevelMaps[])[2][1000] = {
+    LEVEL_1_MAP
+};
 
 
 const LevelData_t m_Levels[] = {
