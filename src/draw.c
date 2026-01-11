@@ -5,6 +5,7 @@
 #include "draw.h"
 #include "colour.h"
 #include "constants.h"
+#include "entity.h"
 #include "utils.h"
 #include "window.h"
 
@@ -24,6 +25,51 @@ void DRAW_fill_screen(uint32_t argb)
     for (i = 0; i < RENDER_WIDTH * RENDER_HEIGHT; i++)
     {
         m_Pixels[i] = argb;
+    }
+}
+
+
+/**
+ * Draw 8x8 sprite at specified coordinates
+ *
+ * @param entity    entity to be rendered
+ * @param flip      render the sprite mirrored in y axis
+**/
+void DRAW_entity(
+    EntityGeneric_t *entity,
+    bool flip
+)
+{
+    int idx = 0;
+    int i, j = 0;
+    uint32_t x = (uint32_t)(entity->pos.x) + RENDER_WIDTH / 2;
+    uint32_t y = RENDER_HEIGHT / 2 - (uint32_t)(entity->pos.y);
+    for (j = 0; j < TILE_WIDTH; j++)
+    {
+        for (i = 0; i < TILE_WIDTH / 2; i++)
+        {
+            idx = (x + 2 * i) + RENDER_WIDTH * (y + j);
+            uint8_t a;
+            uint8_t b;
+            if (flip)
+            {
+                b = (entity->sprite[TILE_WIDTH / 2 - 1 - i + (TILE_WIDTH * j) / 2] & 0b01110000) >> 4;
+                a = entity->sprite[TILE_WIDTH / 2 - 1 - i + (TILE_WIDTH * j) / 2] & 0b00000111;
+            }
+            else
+            {
+                a = (entity->sprite[i + (TILE_WIDTH * j) / 2] & 0b01110000) >> 4;
+                b = entity->sprite[i + (TILE_WIDTH * j) / 2] & 0b00000111;
+            }
+            if (a != 0)
+            {
+                m_Pixels[idx] = entity->palette[a];
+            }
+            if (b != 0)
+            {
+                m_Pixels[idx + 1] = entity->palette[b];
+            }
+        }
     }
 }
 

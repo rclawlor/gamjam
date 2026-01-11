@@ -1,0 +1,15 @@
+LICENSE.txt
+README.md
+pyproject.toml
+src/CSprite.egg-info/PKG-INFO
+src/CSprite.egg-info/SOURCES.txt
+src/CSprite.egg-info/dependency_links.txt
+src/CSprite.egg-info/top_level.txt
+src/csprite/__init__.py
+src/csprite/display.py
+src/csprite/graphics.py
+src/csprite/map.py
+src/csprite/palette.py
+src/csprite/shared.py
+src/csprite/sprite.py
+src/csprite/templates/graphics.txt

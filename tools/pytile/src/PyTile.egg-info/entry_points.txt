@@ -1,0 +1,2 @@
+[console_scripts]
+pytile = pytile:app.run

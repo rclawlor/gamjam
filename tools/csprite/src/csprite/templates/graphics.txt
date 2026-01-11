@@ -1,0 +1,62 @@
+/**
+* Generated file
+**/
+
+// Standard library
+#include <dlfcn.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdint.h>
+
+// Local
+#include "assets/graphics.h"
+
+
+#define FIND_SYMBOL(name, cast) \
+    name = cast##dlsym(libgraphics, #name); \
+    if (##name == NULL) { \
+        fprintf(stderr, "Could not find ##name in %s: %s", LIBGRAPHICS_NAME, dlerror()); \
+        return 1; \
+    }
+
+
+const char *LIBGRAPHICS_NAME = "libgraphics.so";
+void *libgraphics;
+
+
+$definitions
+
+
+int GRAPHICS_init()
+{
+    libgraphics = dlopen(LIBGRAPHICS_NAME, RTLD_NOW);
+    if (libgraphics == NULL)
+    {
+        fprintf(stderr, "Could not load %s: %s", LIBGRAPHICS_NAME, dlerror());
+        return 1;
+    }
+
+    $symbols
+
+    return 0;
+}
+
+
+int GRAPHICS_reload()
+{
+    if (libgraphics != NULL)
+    {
+        dlclose(libgraphics);
+    }
+
+    libgraphics = dlopen(LIBGRAPHICS_NAME, RTLD_NOW);
+    if (libgraphics == NULL)
+    {
+        fprintf(stderr, "Could not load %s: %s", LIBGRAPHICS_NAME, dlerror());
+        return 1;
+    }
+
+    $symbols
+
+    return 0;
+}

@@ -1,0 +1,2 @@
+[console_scripts]
+pysprite = pysprite:app.run

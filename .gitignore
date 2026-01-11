@@ -3,3 +3,8 @@ build
 
 # Clang cache
 .cache
+
+# Generated files
+include/assets
+src/assets
+src/lib

@@ -7,6 +7,8 @@ find_package(SDL2 REQUIRED)
 
 file(GLOB SOURCES
     src/*.c
+    src/lib/*.c
+    src/lib/*.h
     include/*.h
 )
 
@@ -20,6 +22,7 @@ target_include_directories(
     ${SDL2_INCLUDE_DIRS}
     src
     include
+    src/lib
 )
 set(CMAKE_C_FLAGS "-g")
 

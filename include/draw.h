@@ -7,9 +7,11 @@
 
 // Local
 #include "constants.h"
+#include "entity.h"
 
 
 void DRAW_fill_screen(uint32_t);
+void DRAW_entity(EntityGeneric_t*, bool);
 void DRAW_tile(uint8_t[], uint32_t, uint32_t, uint32_t[]);
 void DRAW_map(uint8_t[2][SCREEN_TILES], uint8_t[][TILE_SIZE], uint32_t[][PAL_LENGTH]);
 void DRAW_line(int, int, int, int);
