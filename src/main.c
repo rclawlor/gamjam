@@ -16,6 +16,7 @@
 #include "flag.h"
 #include "framerate.h"
 #include "graphics.h"
+#include "text.h"
 #include "levels.h"
 #include "assets/sprite.h"
 #include "flag.h"
@@ -51,6 +52,7 @@ int main(int argc, char* args[])
 
     bool win;
     int i, j;
+    char msg[64] = {};
     while (!WindowMgr_should_quit())
     {
         // Update FPS
@@ -100,6 +102,15 @@ int main(int argc, char* args[])
         {
             DRAW_apply_blur();
             DRAW_desaturate(0.8);
+            sprintf(msg, "LEVEL %d COMPLETE", level + 1),
+            TEXT_render(
+                160,
+                100,
+                ALIGN_CENTRE,
+                msg,
+                FONT_SPRITE,
+                &(*PLAYER_PAL[0])
+            );
         }
         WindowMgr_render();
         FramerateMgr_fix_framerate();
