@@ -109,7 +109,7 @@ int main(int argc, char* args[])
                 ALIGN_CENTRE,
                 msg,
                 FONT_SPRITE,
-                &(*PLAYER_PAL[0])
+                &(*FONT_PAL[0])
             );
         }
         WindowMgr_render();
