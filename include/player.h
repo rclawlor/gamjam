@@ -50,6 +50,7 @@ void PlayerMgr_set_x_acc(double acc);
 void PlayerMgr_set_y_acc(double acc);
 Error_e PlayerMgr_add_player();
 Error_e PlayerMgr_remove_player();
+void PlayerMgr_clear_players();
 
 extern StateMachine_t PlayerSM;
 

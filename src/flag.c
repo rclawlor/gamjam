@@ -82,3 +82,14 @@ bool FlagMgr_check_win() {
 
     return win;
 }
+
+
+/**
+* Clear all flags
+**/
+void FlagMgr_clear_flags()
+{
+    while (m_FlagEntity.num_flags != 0) {
+        FlagMgr_remove_flag();
+    }
+}

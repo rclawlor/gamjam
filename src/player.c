@@ -211,3 +211,14 @@ Error_e PlayerMgr_remove_player()
 
     return OK;
 }
+
+
+/**
+* Clear all players
+**/
+void PlayerMgr_clear_players()
+{
+    while (m_PlayerEntity.num_player != 0) {
+        PlayerMgr_remove_player();
+    }
+}

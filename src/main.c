@@ -16,6 +16,7 @@
 #include "flag.h"
 #include "framerate.h"
 #include "graphics.h"
+#include "levels.h"
 #include "assets/palette.h"
 #include "assets/sprite.h"
 #include "flag.h"
@@ -39,23 +40,12 @@ int main(int argc, char* args[])
 
     // Player
     PlayerMgr_init();
-    m_PlayerEntity.entitys[0]->pos.x = -50.0;
-    m_PlayerEntity.entitys[0]->pos.y = 80.0;
-    ENTITY_set_sprite(m_PlayerEntity.entitys[0], &(*PLAYER_SPRITE)[0]);
-    ENTITY_set_palette(m_PlayerEntity.entitys[0], &(*PLAYER_PAL[PLAYER_1]));
-    ENTITY_register_sm(m_PlayerEntity.entitys[0], &PlayerSM);
-
-    /**
-    PlayerMgr_add_player();
-    m_PlayerEntity.entitys[0]->pos.x = -50.0;
-    m_PlayerEntity.entitys[1]->pos.y = 70.0;
-    ENTITY_set_sprite(m_PlayerEntity.entitys[1], &(*PLAYER_SPRITE)[0]);
-    ENTITY_set_palette(m_PlayerEntity.entitys[1], &(*PLAYER_PAL[PLAYER_2]));
-    ENTITY_register_sm(m_PlayerEntity.entitys[1], &PlayerSM);
-    **/
-
     // Flags
     FlagMgr_init();
+
+    int level = 0;
+    LoadLevelEntities(level);
+
     ObjectSpr_e animation_frame = FLAG_1;
     SpriteAnimation_t flag_animation;
     ANIMATION_start(&flag_animation, 0.1, 2);
@@ -107,7 +97,8 @@ int main(int argc, char* args[])
         bool win = FlagMgr_check_win();
         if (win)
         {
-            return 0;
+            DRAW_apply_blur();
+            DRAW_desaturate(0.8);
         }
         WindowMgr_render();
         FramerateMgr_fix_framerate();

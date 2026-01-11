@@ -21,6 +21,7 @@ void FlagMgr_init();
 // Utilitiy functions
 Error_e FlagMgr_add_flag(Vector2D_t pos);
 Error_e FlagMgr_remove_flag();
+void FlagMgr_clear_flags();
 bool FlagMgr_check_win();
 
 
