@@ -7,6 +7,7 @@
 #include <SDL_events.h>
 
 // Local
+#include "animation.h"
 #include "collision.h"
 #include "colour.h"
 #include "draw.h"
@@ -15,6 +16,7 @@
 #include "framerate.h"
 #include "graphics.h"
 #include "assets/palette.h"
+#include "assets/sprite.h"
 #include "object.h"
 #include "player.h"
 #include "window.h"
@@ -49,7 +51,11 @@ int main(int argc, char* args[])
     ENTITY_set_palette(m_PlayerEntity.entitys[1], &(*PLAYER_PAL[PLAYER_2]));
     ENTITY_register_sm(m_PlayerEntity.entitys[1], &PlayerSM);
 
+    // Flags
     FlagMgr_init();
+    ObjectSpr_e animation_frame = FLAG_1;
+    SpriteAnimation_t flag_animation;
+    ANIMATION_start(&flag_animation, 0.1, 2);
 
     Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
     Timer_set_now(&m_PlayerEntity.entitys[1]->last_update);
@@ -87,8 +93,11 @@ int main(int argc, char* args[])
         {
             DRAW_entity(m_PlayerEntity.entitys[i], false);
         }
+
+        ANIMATION_step(&flag_animation);
         for (i = 0; i < m_FlagEntity.num_flags; i++)
         {
+            ENTITY_set_sprite(m_FlagEntity.entitys[i], &(*OBJECT_SPRITE[flag_animation.current_frame]));
             DRAW_entity(m_FlagEntity.entitys[i], false);
         }
 
