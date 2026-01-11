@@ -68,11 +68,18 @@ int main(int argc, char* args[])
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
         DRAW_map(LEVEL_1_MAP[0], BACKGROUND_SPRITE, BACKGROUND_PAL);
 
-        int i;
+        int i, j;
         for (i = 0; i < m_PlayerEntity.num_player; i++)
         {
             ENTITY_update(m_PlayerEntity.entitys[i]);
             COLLISION_resolve_map(m_PlayerEntity.entitys[i], LEVEL_1_MAP[0], BACKGROUND_SPRITE);
+            for (j = 0; j < m_PlayerEntity.num_player; j++)
+            {
+                if (j == i) {
+                    continue;
+                }
+                COLLISION_resolve_entity(m_PlayerEntity.entitys[j], m_PlayerEntity.entitys[i]);
+            }
         }
         for (i = 0; i < m_PlayerEntity.num_player; i++)
         {

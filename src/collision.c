@@ -4,7 +4,6 @@
 // Local
 #include "collision.h"
 #include "constants.h"
-#include "draw.h"
 #include "entity.h"
 #include "vector.h"
 
@@ -173,7 +172,6 @@ Vector2D_t COLLISION_check_entity(
         .x = entity_b->pos.x - entity_a->pos.x,
         .y = entity_b->pos.y - entity_a->pos.y
     };
-    printf("(%d, %d)\n", offset.x, offset.y);
 
     if (abs(offset.x) >= TILE_WIDTH || abs(offset.y) >= TILE_WIDTH)
     {
@@ -248,10 +246,19 @@ void COLLISION_resolve_entity(
 {
     Vector2D_t direction;
     direction = COLLISION_check_entity(entity_a, entity_b);
-    DRAW_line(
-        entity_a->pos.x,
-        entity_a->pos.y,
-        entity_a->pos.x + direction.x,
-        entity_a->pos.y + direction.y
-    );
+
+    while (direction.y != 0 || direction.x != 0)
+    {
+        if (fabs(direction.y) > fabs(direction.x))
+        {
+            entity_a->pos.y += direction.y > 0 ? 1 : -1;
+            entity_a->vel.y = 0;
+        }
+        else
+        {
+            entity_a->pos.x += direction.x > 0 ? 1 : -1;
+            entity_a->vel.x = 0;
+        }
+        direction = COLLISION_check_entity(entity_b, entity_a);
+    }
 }
