@@ -12,6 +12,7 @@ uint8_t (*LevelMaps[])[2][1000] = {
     LEVEL_1_MAP,
     LEVEL_2_MAP,
     LEVEL_3_MAP,
+    LEVEL_4_MAP,
 };
 
 
@@ -50,6 +51,22 @@ const LevelData_t m_Levels[] = {
             { .x = -82, .y = 8},
             { .x = 68, .y = 24},
             { .x = 68, .y = -8},
+        }
+    },
+    {
+        .level = 4,
+        .num_players = 4,
+        .player_pos = {
+            { .x = 10, .y = 32 },
+            { .x = 0, .y = 32 },
+            { .x = -10, .y = 32 },
+            { .x = -20, .y = 32 },
+        },
+        .flag_pos = {
+            { .x = -32, .y = -16},
+            { .x = -22, .y = -16},
+            { .x = -12, .y = -16},
+            { .x = -2, .y = -16},
         }
     }
 };
