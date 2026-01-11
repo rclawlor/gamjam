@@ -49,6 +49,8 @@ int main(int argc, char* args[])
     SpriteAnimation_t flag_animation;
     ANIMATION_start(&flag_animation, 0.1, 2);
 
+    bool win;
+    int i, j;
     while (!WindowMgr_should_quit())
     {
         // Update FPS
@@ -66,17 +68,19 @@ int main(int argc, char* args[])
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
         DRAW_map(*LevelMaps[level], BACKGROUND_SPRITE, BACKGROUND_PAL);
 
-        int i, j;
-        for (i = 0; i < m_PlayerEntity.num_player; i++)
+        if (!win)
         {
-            ENTITY_update(m_PlayerEntity.entitys[i]);
-            COLLISION_resolve_map(m_PlayerEntity.entitys[i], *LevelMaps[level], BACKGROUND_SPRITE);
-            for (j = 0; j < m_PlayerEntity.num_player; j++)
+            for (i = 0; i < m_PlayerEntity.num_player; i++)
             {
-                if (j == i) {
-                    continue;
+                ENTITY_update(m_PlayerEntity.entitys[i]);
+                COLLISION_resolve_map(m_PlayerEntity.entitys[i], *LevelMaps[level], BACKGROUND_SPRITE);
+                for (j = 0; j < m_PlayerEntity.num_player; j++)
+                {
+                    if (j == i) {
+                        continue;
+                    }
+                    COLLISION_resolve_entity(m_PlayerEntity.entitys[j], m_PlayerEntity.entitys[i]);
                 }
-                COLLISION_resolve_entity(m_PlayerEntity.entitys[j], m_PlayerEntity.entitys[i]);
             }
         }
         for (i = 0; i < m_PlayerEntity.num_player; i++)
@@ -91,7 +95,7 @@ int main(int argc, char* args[])
             DRAW_entity(m_FlagEntity.entitys[i], false);
         }
 
-        bool win = FlagMgr_check_win();
+        win = FlagMgr_check_win();
         if (win)
         {
             DRAW_apply_blur();
