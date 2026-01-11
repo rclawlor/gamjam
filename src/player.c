@@ -10,7 +10,6 @@ const float PLAYER_A_PPS = 35.0;
 
 // Module variables
 EntityPlayer_t m_PlayerEntity = {0};
-Timer_t jump_timer;
 
 // Player state machine transitions
 State_t player_state_table[NUM_PLAYER_STATES] = {

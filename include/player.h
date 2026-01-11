@@ -10,7 +10,6 @@
 
 
 // Constants
-#define NUM_PLAYER 4
 extern const float PLAYER_VY_JUMP_PPS;
 extern const float ENTITY_AX_PPS;
 extern const float ENTITY_AY_PPS;

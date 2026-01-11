@@ -14,5 +14,8 @@
 // Palette
 #define PAL_LENGTH 8
 
+// Game
+#define NUM_PLAYER 4
+
 
 #endif // CONSTANTS_H_

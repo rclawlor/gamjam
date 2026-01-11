@@ -15,6 +15,7 @@
 #include "framerate.h"
 #include "graphics.h"
 #include "assets/palette.h"
+#include "object.h"
 #include "player.h"
 #include "window.h"
 
@@ -48,6 +49,7 @@ int main(int argc, char* args[])
     ENTITY_set_palette(m_PlayerEntity.entitys[1], &(*PLAYER_PAL[PLAYER_2]));
     ENTITY_register_sm(m_PlayerEntity.entitys[1], &PlayerSM);
 
+    FlagMgr_init();
 
     Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
     Timer_set_now(&m_PlayerEntity.entitys[1]->last_update);
@@ -84,6 +86,10 @@ int main(int argc, char* args[])
         for (i = 0; i < m_PlayerEntity.num_player; i++)
         {
             DRAW_entity(m_PlayerEntity.entitys[i], false);
+        }
+        for (i = 0; i < m_FlagEntity.num_flags; i++)
+        {
+            DRAW_entity(m_FlagEntity.entitys[i], false);
         }
 
         WindowMgr_render();
