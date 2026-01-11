@@ -1,6 +1,8 @@
 // Local
-#include "object.h"
+#include "collision.h"
+#include "flag.h"
 #include "entity.h"
+#include "player.h"
 #include "vector.h"
 #include "graphics.h"
 #include "assets/sprite.h"
@@ -62,4 +64,21 @@ Error_e FlagMgr_remove_flag()
     m_FlagEntity.num_flags -= 1;
 
     return OK;
+}
+
+
+/**
+* Check win
+**/
+bool FlagMgr_check_win() {
+    int i;
+    Vector2D_t vec;
+    bool win = true;
+    for (i = 0; i < m_PlayerEntity.num_player; i++)
+    {
+        vec = COLLISION_check_entity(m_PlayerEntity.entitys[i], m_FlagEntity.entitys[i]);
+        win &= (vec.x != 0 && vec.y != 0);
+    }
+
+    return win;
 }

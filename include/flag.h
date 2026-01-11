@@ -1,5 +1,5 @@
-#ifndef OBJECT_H_
-#define OBJECT_H_
+#ifndef FLAG_H_
+#define FLAG_H_
 
 // Local
 #include "constants.h"
@@ -21,6 +21,7 @@ void FlagMgr_init();
 // Utilitiy functions
 Error_e FlagMgr_add_flag(Vector2D_t pos);
 Error_e FlagMgr_remove_flag();
+bool FlagMgr_check_win();
 
 
-#endif // OBJECT_H_
+#endif // FLAG_H_
