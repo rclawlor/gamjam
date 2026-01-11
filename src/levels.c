@@ -8,9 +8,16 @@
 
 const LevelData_t m_Levels[] = {
     {
-        .num_players = 1,
-        .player_pos = {{ .x = 0, .y = 0 }},
-        .flag_pos = {{ .x = 10, .y = 10}}
+        .level = 1,
+        .num_players = 2,
+        .player_pos = {
+            { .x = 0, .y = 0 },
+            { .x = 20, .y = 20 }
+        },
+        .flag_pos = {
+            { .x = 10, .y = 10},
+            { .x = 50, .y = 50}
+        }
     }
 };
 
@@ -31,7 +38,7 @@ void LoadLevelEntities(int level)
         m_PlayerEntity.entitys[i]->pos.x = data.player_pos[i].x;
         m_PlayerEntity.entitys[i]->pos.y = data.player_pos[i].y;
         ENTITY_set_sprite(m_PlayerEntity.entitys[i], &(*PLAYER_SPRITE)[0]);
-        ENTITY_set_palette(m_PlayerEntity.entitys[i], &(*PLAYER_PAL[PLAYER_1]));
+        ENTITY_set_palette(m_PlayerEntity.entitys[i], &(*PLAYER_PAL[i]));
         ENTITY_register_sm(m_PlayerEntity.entitys[i], &PlayerSM);
 
         FlagMgr_add_flag(data.flag_pos[i]);

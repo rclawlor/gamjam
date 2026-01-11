@@ -6,6 +6,7 @@
 #include "vector.h"
 
 typedef struct {
+    int level;
     int num_players;
     Vector2D_t player_pos[NUM_PLAYER];
     Vector2D_t flag_pos[NUM_PLAYER];
