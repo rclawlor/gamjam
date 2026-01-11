@@ -14,10 +14,7 @@
 
 
 // Constants
-const float ENTITY_MAX_VX_PPS = 25.0;
-const float ENTITY_MAX_VY_PPS = 50.0;
-const float ENTITY_G_STRONG_PPS = -45.0;
-const float ENTITY_G_WEAK_PPS = -35.0;
+const float ENTITY_MAX_V_PPS = 25.0;
 const double MAX_JUMP_S = 0.2;
 
 
@@ -59,13 +56,10 @@ void ENTITY_update_position(EntityGeneric_t *entity)
     // Scale based on time delta
     float scale = 1.0 / (float) dt;
 
-    // Update acceleration based on forces
-    entity->acc.y = -45.0 / mass + entity->force.y * scale / mass;
-
     // Update velocity based on acceleration
     entity->vel.x += (entity->acc.x * scale);
     entity->vel.y += (entity->acc.y * scale);
-    entity->vel.y = flimit(entity->vel.y, ENTITY_MAX_VY_PPS);
+    entity->vel.y = flimit(entity->vel.y, ENTITY_MAX_V_PPS);
 
     // Update position based on velocity
     float dx = entity->vel.x * scale;
@@ -79,15 +73,27 @@ void ENTITY_update_position(EntityGeneric_t *entity)
     {
         entity->vel.x *= (1.0 - friction * scale);
     }
+    if (entity->acc.y == 0) 
+    {
+        entity->vel.y *= (1.0 - friction * scale);
+    }
 
     // Limit maximum speed
     if (entity->vel.x < 0)
     {
-        entity->vel.x = fmaxf(entity->vel.x, -ENTITY_MAX_VX_PPS);
+        entity->vel.x = fmaxf(entity->vel.x, -ENTITY_MAX_V_PPS);
     }
     else
     {
-        entity->vel.x = fminf(entity->vel.x, ENTITY_MAX_VX_PPS);
+        entity->vel.x = fminf(entity->vel.x, ENTITY_MAX_V_PPS);
+    }
+    if (entity->vel.y < 0)
+    {
+        entity->vel.y = fmaxf(entity->vel.y, -ENTITY_MAX_V_PPS);
+    }
+    else
+    {
+        entity->vel.y = fminf(entity->vel.y, ENTITY_MAX_V_PPS);
     }
 
     Timer_set_now(&entity->last_update);

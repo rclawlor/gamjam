@@ -39,6 +39,7 @@ int main(int argc, char* args[])
     ENTITY_set_palette(&m_PlayerEntity.entity, &(*PLAYER_PAL)[PLAYER]);
     ENTITY_register_sm(&m_PlayerEntity.entity, &PlayerSM);
 
+    Timer_set_now(&m_PlayerEntity.entity.last_update);
     while (!WindowMgr_should_quit())
     {
         // Update FPS
@@ -55,6 +56,7 @@ int main(int argc, char* args[])
 
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
 
+        ENTITY_update(&m_PlayerEntity.entity);
         DRAW_entity(&m_PlayerEntity.entity, false);
 
         WindowMgr_render();

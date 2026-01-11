@@ -21,8 +21,6 @@
 extern const float ENTITY_MAX_VX_PPS;
 extern const float ENTITY_MAX_VY_PPS;
 extern const float ENTITY_VY_JUMP_PPS;
-extern const float ENTITY_G_STRONG_PPS;
-extern const float ENTITY_G_WEAK_PPS;
 extern const double MAX_JUMP_S;
 
 

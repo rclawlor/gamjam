@@ -5,9 +5,7 @@
 
 
 // Constants
-const float PLAYER_VY_JUMP_PPS = 60.0;
-const float PLAYER_AX_PPS = 35.0;
-const float PLAYER_AY_PPS = 25.0;
+const float PLAYER_A_PPS = 35.0;
 
 
 // Module variables
@@ -20,26 +18,18 @@ State_t player_state_table[NUM_PLAYER_STATES] = {
         .on_entry = PlayerSM_idle_entry,
         .on_exit = NULL,
         .transititons = {
-            { .guard = PlayerSM_should_jump, .next_state = STATE_JUMPING },
+            { .guard = PlayerSM_is_moving, .next_state = STATE_MOVING },
             { .guard = NULL, .next_state = STATE_IDLE }
         }
     },
-    [STATE_JUMPING] = {
-        .on_entry = PlayerSM_jumping_entry,
+    [STATE_MOVING] = {
+        .on_entry = PlayerSM_moving_entry,
         .on_exit = NULL,
         .transititons = {
-            { .guard = PlayerSM_should_fall, .next_state = STATE_FALLING },
-            { .guard = NULL, .next_state = STATE_JUMPING }
+            { .guard = PlayerSM_is_stationary, .next_state = STATE_IDLE },
+            { .guard = NULL, .next_state = STATE_MOVING }
         }
     },
-    [STATE_FALLING] = {
-        .on_entry = PlayerSM_falling_entry,
-        .on_exit = NULL,
-        .transititons = {
-            { .guard = PlayerSM_on_ground, .next_state = STATE_IDLE },
-            { .guard = NULL, .next_state = STATE_FALLING }
-        }
-    }
 };
 StateMachine_t PlayerSM = {
     .current_state = STATE_IDLE,
@@ -50,46 +40,18 @@ StateMachine_t PlayerSM = {
 
 // Player state machine entry/exit functions
 void PlayerSM_idle_entry() {}
-void PlayerSM_jumping_entry() {
-    m_PlayerEntity.entity.vel.y = PLAYER_VY_JUMP_PPS;
-    m_PlayerEntity.entity.force.y += 1;
-    Timer_set_now(&jump_timer);
-}
-void PlayerSM_falling_entry() {
-    m_PlayerEntity.entity.force.y = 0;
-    m_PlayerEntity.entity.acc.y = ENTITY_G_STRONG_PPS;
-}
+void PlayerSM_moving_entry() {}
 
-// Player state machine guards
-bool g_jump_pressed = false;
-
-
-bool PlayerSM_should_jump()
+bool PlayerSM_is_moving()
 {
-    return g_jump_pressed;
+    return (
+        fabs(m_PlayerEntity.entity.vel.x) >= 1
+        || fabs(m_PlayerEntity.entity.vel.y) >= 1
+    );
 }
 
-
-bool PlayerSM_should_fall()
-{
-    return Timer_get_elapsed_time(&jump_timer) > MAX_JUMP_S || !g_jump_pressed;
-}
-
-bool PlayerSM_on_ground()
-{
-    return fabs(m_PlayerEntity.entity.vel.y) < 1e-3 && PlayerSM.current_state != STATE_JUMPING;
-}
-
-
-bool moving()
-{
-    return fabs(m_PlayerEntity.entity.vel.x) >= 1;
-}
-
-
-bool jumping()
-{
-    return PlayerSM.current_state == STATE_JUMPING || PlayerSM.current_state == STATE_FALLING;
+bool PlayerSM_is_stationary() {
+    return !PlayerSM_is_moving();
 }
 
 
@@ -102,7 +64,7 @@ void PlayerMgr_init()
     m_PlayerEntity.entity.pos = nil;
     m_PlayerEntity.entity.vel = nil;
     m_PlayerEntity.entity.acc.x = 0;
-    m_PlayerEntity.entity.acc.y = ENTITY_G_STRONG_PPS;
+    m_PlayerEntity.entity.acc.y = 0;
     m_PlayerEntity.entity.force = nil;
 
     OBSERVER_Subscribe_KEYDOWN(PlayerMgr_on_keydown);
@@ -122,16 +84,16 @@ void PlayerMgr_on_keydown(KeyEvent_t *evt)
     switch (evt->key)
     {
         case SDLK_LEFT:
-            m_PlayerEntity.entity.acc.x = -PLAYER_AX_PPS;
+            m_PlayerEntity.entity.acc.x = -PLAYER_A_PPS;
             break;
         case SDLK_RIGHT:
-            m_PlayerEntity.entity.acc.x = PLAYER_AX_PPS;
+            m_PlayerEntity.entity.acc.x = PLAYER_A_PPS;
             break;
         case SDLK_UP:
-            if (PlayerSM.current_state != STATE_JUMPING && PlayerSM.current_state != STATE_FALLING)
-            {
-                g_jump_pressed = true;
-            }
+            m_PlayerEntity.entity.acc.y = PLAYER_A_PPS;
+            break;
+        case SDLK_DOWN:
+            m_PlayerEntity.entity.acc.y = -PLAYER_A_PPS;
             break;
         default:
             break;
@@ -153,7 +115,8 @@ void PlayerMgr_on_keyup(KeyEvent_t *evt)
             m_PlayerEntity.entity.acc.x = 0.0;
             break;
         case SDLK_UP:
-            g_jump_pressed = false;
+        case SDLK_DOWN:
+            m_PlayerEntity.entity.acc.y = 0.0;
             break;
         default:
             break;
