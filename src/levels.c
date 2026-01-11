@@ -18,12 +18,12 @@ const LevelData_t m_Levels[] = {
         .level = 1,
         .num_players = 2,
         .player_pos = {
-            { .x = 0, .y = 0 },
-            { .x = 20, .y = 20 }
+            { .x = 24, .y = -24 },
+            { .x = -32, .y = 32 }
         },
         .flag_pos = {
-            { .x = 10, .y = 10},
-            { .x = 50, .y = 50}
+            { .x = -44, .y = 32},
+            { .x = 36, .y = -24}
         }
     }
 };
