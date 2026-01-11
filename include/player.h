@@ -3,6 +3,7 @@
 
 // Local
 #include "entity.h"
+#include "error.h"
 #include "observer.h"
 #include "state_machine.h"
 #include "vector.h"
@@ -48,6 +49,8 @@ bool PlayerSM_is_stationary();
 void PlayerMgr_set_acc(Vector2D_t acc);
 void PlayerMgr_set_x_acc(double acc);
 void PlayerMgr_set_y_acc(double acc);
+Error_e PlayerMgr_add_player();
+Error_e PlayerMgr_remove_player();
 
 extern StateMachine_t PlayerSM;
 

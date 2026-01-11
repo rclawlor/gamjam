@@ -14,7 +14,7 @@
 #include "event.h"
 #include "framerate.h"
 #include "graphics.h"
-#include "assets/sprite.h"
+#include "assets/palette.h"
 #include "player.h"
 #include "window.h"
 
@@ -35,12 +35,22 @@ int main(int argc, char* args[])
 
     // Player
     PlayerMgr_init();
+    m_PlayerEntity.entitys[0]->pos.x = -50.0;
     m_PlayerEntity.entitys[0]->pos.y = 80.0;
     ENTITY_set_sprite(m_PlayerEntity.entitys[0], &(*PLAYER_SPRITE)[0]);
-    ENTITY_set_palette(m_PlayerEntity.entitys[0], &(*PLAYER_PAL)[PLAYER]);
+    ENTITY_set_palette(m_PlayerEntity.entitys[0], &(*PLAYER_PAL[PLAYER_1]));
     ENTITY_register_sm(m_PlayerEntity.entitys[0], &PlayerSM);
 
+    PlayerMgr_add_player();
+    m_PlayerEntity.entitys[0]->pos.x = -50.0;
+    m_PlayerEntity.entitys[1]->pos.y = 70.0;
+    ENTITY_set_sprite(m_PlayerEntity.entitys[1], &(*PLAYER_SPRITE)[0]);
+    ENTITY_set_palette(m_PlayerEntity.entitys[1], &(*PLAYER_PAL[PLAYER_2]));
+    ENTITY_register_sm(m_PlayerEntity.entitys[1], &PlayerSM);
+
+
     Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
+    Timer_set_now(&m_PlayerEntity.entitys[1]->last_update);
     while (!WindowMgr_should_quit())
     {
         // Update FPS

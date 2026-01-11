@@ -1,4 +1,5 @@
 // Local
+#include "error.h"
 #include "vector.h"
 #include "player.h"
 
@@ -67,26 +68,10 @@ bool PlayerSM_is_stationary() {
 **/
 void PlayerMgr_init()
 {
-    Vector2D_t nil = { .x = 0, .y = 0 };
-
-    // Allocate memory for the entity before using it
-    m_PlayerEntity.entitys[0] = malloc(sizeof(EntityGeneric_t));
-    if (m_PlayerEntity.entitys[0] == NULL) {
-        // Handle allocation failure
-        fprintf(stderr, "Failed to allocate memory for player entity\n");
-        return;
-    }
-    m_PlayerEntity.num_player = 1;
-    m_PlayerEntity.entitys[0]->pos = nil;
-    m_PlayerEntity.entitys[0]->vel = nil;
-    m_PlayerEntity.entitys[0]->acc.x = 0;
-    m_PlayerEntity.entitys[0]->acc.y = 0;
-    m_PlayerEntity.entitys[0]->force = nil;
+    PlayerMgr_add_player();
 
     OBSERVER_Subscribe_KEYDOWN(PlayerMgr_on_keydown);
     OBSERVER_Subscribe_KEYUP(PlayerMgr_on_keyup);
-
-    Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
 }
 
 
@@ -182,4 +167,48 @@ void PlayerMgr_set_y_acc(double acc)
     {
         m_PlayerEntity.entitys[i]->acc.y = acc;
     }
+}
+
+
+/**
+ * Add player entity
+**/
+Error_e PlayerMgr_add_player()
+{
+    Vector2D_t nil = { .x = 0, .y = 0 };
+
+    // Allocate memory for the entity before using it
+    int idx = m_PlayerEntity.num_player;
+    if (idx >= NUM_PLAYER)
+    {
+        return ERROR_OUT_OF_BOUNDS;
+    }
+    m_PlayerEntity.entitys[idx] = malloc(sizeof(EntityGeneric_t));
+    if (m_PlayerEntity.entitys[idx] == NULL) {
+        // Handle allocation failure
+        fprintf(stderr, "Failed to allocate memory for player entity\n");
+        return ERROR_OUT_OF_BOUNDS;
+    }
+    m_PlayerEntity.num_player += 1;
+    m_PlayerEntity.entitys[idx]->pos = nil;
+    m_PlayerEntity.entitys[idx]->vel = nil;
+    m_PlayerEntity.entitys[idx]->acc.x = 0;
+    m_PlayerEntity.entitys[idx]->acc.y = 0;
+    m_PlayerEntity.entitys[idx]->force = nil;
+
+    Timer_set_now(&m_PlayerEntity.entitys[idx]->last_update);
+
+    return OK;
+}
+
+
+/**
+ * Remove player entity at index
+**/
+Error_e PlayerMgr_remove_player()
+{
+    free(m_PlayerEntity.entitys[m_PlayerEntity.num_player]);
+    m_PlayerEntity.num_player -= 1;
+
+    return OK;
 }
