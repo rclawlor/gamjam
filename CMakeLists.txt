@@ -7,6 +7,7 @@ find_package(SDL2 REQUIRED)
 
 file(GLOB SOURCES
     src/*.c
+    include/*.h
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/lib)
@@ -17,8 +18,8 @@ target_include_directories(
     gamjam
     PUBLIC
     ${SDL2_INCLUDE_DIRS}
-    src/application
-    src/include
+    src
+    include
 )
 set(CMAKE_C_FLAGS "-g")
 
