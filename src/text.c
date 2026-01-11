@@ -179,8 +179,10 @@ KerningPair_t font_kerning[] = {
     // C
     // D
     // E
+    { .left = 'E', .right = 'L', .offset = -3 },
     { .left = 'E', .right = 'S', .offset = -3 },
     { .left = 'E', .right = 'T', .offset = -3 },
+    { .left = 'E', .right = 'V', .offset = -2 },
     // F
     // G
     { .left = 'G', .right = 'S', .offset = -2 },
@@ -192,6 +194,7 @@ KerningPair_t font_kerning[] = {
     // J
     // K
     // L
+    { .left = 'L', .right = 'E', .offset = -3 },
     { .left = 'L', .right = 'U', .offset = -4 },
     // M
     // N
@@ -200,6 +203,7 @@ KerningPair_t font_kerning[] = {
     { .left = 'O', .right = 'L', .offset = -4 },
     { .left = 'O', .right = 'N', .offset = -3 },
     // P
+    { .left = 'P', .right = 'L', .offset = -3 },
     // Q
     { .left = 'Q', .right = 'U', .offset = -3 },
     // R
@@ -210,6 +214,7 @@ KerningPair_t font_kerning[] = {
     { .left = 'S', .right = 'O', .offset = -2 },
     { .left = 'S', .right = 'U', .offset = -3 },
     // T
+    { .left = 'T', .right = 'E', .offset = -2 },
     { .left = 'T', .right = 'I', .offset = -4 },
     { .left = 'T', .right = 'T', .offset = -3 },
     { .left = 'T', .right = 'U', .offset = -3 },
@@ -219,6 +224,7 @@ KerningPair_t font_kerning[] = {
     { .left = 'U', .right = 'R', .offset = -3 },
     { .left = 'U', .right = 'T', .offset = -3 },
     // V
+    { .left = 'V', .right = 'E', .offset = -2 },
     // W
     // X
     { .left = 'X', .right = '1', .offset = -1 },
