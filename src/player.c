@@ -1,5 +1,4 @@
 // Local
-#include "entity.h"
 #include "vector.h"
 #include "player.h"
 
@@ -44,10 +43,18 @@ void PlayerSM_moving_entry() {}
 
 bool PlayerSM_is_moving()
 {
-    return (
-        fabs(m_PlayerEntity.entity.vel.x) >= 1
-        || fabs(m_PlayerEntity.entity.vel.y) >= 1
-    );
+    int i;
+    bool moving = false;
+
+    for (i = 0; i < m_PlayerEntity.num_player; i++)
+    {
+        moving |= (
+            fabs(m_PlayerEntity.entitys[i]->vel.x) >= 1
+            || fabs(m_PlayerEntity.entitys[i]->vel.y) >= 1
+        );
+
+    }
+    return moving;
 }
 
 bool PlayerSM_is_stationary() {
@@ -61,16 +68,25 @@ bool PlayerSM_is_stationary() {
 void PlayerMgr_init()
 {
     Vector2D_t nil = { .x = 0, .y = 0 };
-    m_PlayerEntity.entity.pos = nil;
-    m_PlayerEntity.entity.vel = nil;
-    m_PlayerEntity.entity.acc.x = 0;
-    m_PlayerEntity.entity.acc.y = 0;
-    m_PlayerEntity.entity.force = nil;
+
+    // Allocate memory for the entity before using it
+    m_PlayerEntity.entitys[0] = malloc(sizeof(EntityGeneric_t));
+    if (m_PlayerEntity.entitys[0] == NULL) {
+        // Handle allocation failure
+        fprintf(stderr, "Failed to allocate memory for player entity\n");
+        return;
+    }
+    m_PlayerEntity.num_player = 1;
+    m_PlayerEntity.entitys[0]->pos = nil;
+    m_PlayerEntity.entitys[0]->vel = nil;
+    m_PlayerEntity.entitys[0]->acc.x = 0;
+    m_PlayerEntity.entitys[0]->acc.y = 0;
+    m_PlayerEntity.entitys[0]->force = nil;
 
     OBSERVER_Subscribe_KEYDOWN(PlayerMgr_on_keydown);
     OBSERVER_Subscribe_KEYUP(PlayerMgr_on_keyup);
 
-    Timer_set_now(&m_PlayerEntity.entity.last_update);
+    Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
 }
 
 
@@ -84,16 +100,16 @@ void PlayerMgr_on_keydown(KeyEvent_t *evt)
     switch (evt->key)
     {
         case SDLK_LEFT:
-            m_PlayerEntity.entity.acc.x = -PLAYER_A_PPS;
+            PlayerMgr_set_x_acc(-PLAYER_A_PPS);
             break;
         case SDLK_RIGHT:
-            m_PlayerEntity.entity.acc.x = PLAYER_A_PPS;
+            PlayerMgr_set_x_acc(PLAYER_A_PPS);
             break;
         case SDLK_UP:
-            m_PlayerEntity.entity.acc.y = PLAYER_A_PPS;
+            PlayerMgr_set_y_acc(PLAYER_A_PPS);
             break;
         case SDLK_DOWN:
-            m_PlayerEntity.entity.acc.y = -PLAYER_A_PPS;
+            PlayerMgr_set_y_acc(-PLAYER_A_PPS);
             break;
         default:
             break;
@@ -112,13 +128,58 @@ void PlayerMgr_on_keyup(KeyEvent_t *evt)
     {
         case SDLK_LEFT:
         case SDLK_RIGHT:
-            m_PlayerEntity.entity.acc.x = 0.0;
+            PlayerMgr_set_x_acc(0.0);
             break;
         case SDLK_UP:
         case SDLK_DOWN:
-            m_PlayerEntity.entity.acc.y = 0.0;
+            PlayerMgr_set_y_acc(0.0);
             break;
         default:
             break;
+    }
+}
+
+
+/**
+ * Set acceleration for all player entities
+ *
+ * @param acc       acceleration to set
+**/
+void PlayerMgr_set_acc(Vector2D_t acc)
+{
+    int i;
+    for (i = 0; i < m_PlayerEntity.num_player; i++)
+    {
+        m_PlayerEntity.entitys[i]->acc = acc;
+    }
+}
+
+
+/**
+ * Set x acceleration for all player entities
+ *
+ * @param acc       acceleration to set
+**/
+void PlayerMgr_set_x_acc(double acc)
+{
+    int i;
+    for (i = 0; i < m_PlayerEntity.num_player; i++)
+    {
+        m_PlayerEntity.entitys[i]->acc.x = acc;
+    }
+}
+
+
+/**
+ * Set y acceleration for all player entities
+ *
+ * @param acc       acceleration to set
+**/
+void PlayerMgr_set_y_acc(double acc)
+{
+    int i;
+    for (i = 0; i < m_PlayerEntity.num_player; i++)
+    {
+        m_PlayerEntity.entitys[i]->acc.y = acc;
     }
 }

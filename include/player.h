@@ -5,16 +5,19 @@
 #include "entity.h"
 #include "observer.h"
 #include "state_machine.h"
+#include "vector.h"
 
 
 // Constants
+#define NUM_PLAYER 4
 extern const float PLAYER_VY_JUMP_PPS;
 extern const float ENTITY_AX_PPS;
 extern const float ENTITY_AY_PPS;
 
 
 typedef struct {
-    EntityGeneric_t entity; // Generic entity information
+    int num_player;
+    EntityGeneric_t* entitys[NUM_PLAYER];  // Generic entity information
 } EntityPlayer_t;
 
 extern EntityPlayer_t m_PlayerEntity;
@@ -40,6 +43,11 @@ void PlayerSM_moving_entry();
 // Player state machine guards
 bool PlayerSM_is_moving();
 bool PlayerSM_is_stationary();
+
+// Utility functions
+void PlayerMgr_set_acc(Vector2D_t acc);
+void PlayerMgr_set_x_acc(double acc);
+void PlayerMgr_set_y_acc(double acc);
 
 extern StateMachine_t PlayerSM;
 

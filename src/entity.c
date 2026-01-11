@@ -15,7 +15,6 @@
 
 // Constants
 const float ENTITY_MAX_V_PPS = 25.0;
-const double MAX_JUMP_S = 0.2;
 
 
 /**

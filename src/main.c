@@ -15,8 +15,6 @@
 #include "framerate.h"
 #include "graphics.h"
 #include "assets/sprite.h"
-#include "assets/background.h"
-#include "assets/map.h"
 #include "player.h"
 #include "window.h"
 
@@ -37,12 +35,12 @@ int main(int argc, char* args[])
 
     // Player
     PlayerMgr_init();
-    m_PlayerEntity.entity.pos.y = 80.0;
-    ENTITY_set_sprite(&m_PlayerEntity.entity, &(*PLAYER_SPRITE)[0]);
-    ENTITY_set_palette(&m_PlayerEntity.entity, &(*PLAYER_PAL)[PLAYER]);
-    ENTITY_register_sm(&m_PlayerEntity.entity, &PlayerSM);
+    m_PlayerEntity.entitys[0]->pos.y = 80.0;
+    ENTITY_set_sprite(m_PlayerEntity.entitys[0], &(*PLAYER_SPRITE)[0]);
+    ENTITY_set_palette(m_PlayerEntity.entitys[0], &(*PLAYER_PAL)[PLAYER]);
+    ENTITY_register_sm(m_PlayerEntity.entitys[0], &PlayerSM);
 
-    Timer_set_now(&m_PlayerEntity.entity.last_update);
+    Timer_set_now(&m_PlayerEntity.entitys[0]->last_update);
     while (!WindowMgr_should_quit())
     {
         // Update FPS
@@ -60,9 +58,16 @@ int main(int argc, char* args[])
         DRAW_fill_screen(ARGB(0xff, 0x00, 0x00, 0x00));
         DRAW_map(LEVEL_1_MAP[0], BACKGROUND_SPRITE, BACKGROUND_PAL);
 
-        ENTITY_update(&m_PlayerEntity.entity);
-        COLLISION_resolve_map(&m_PlayerEntity.entity, LEVEL_1_MAP[0], BACKGROUND_SPRITE);
-        DRAW_entity(&m_PlayerEntity.entity, false);
+        int i;
+        for (i = 0; i < m_PlayerEntity.num_player; i++)
+        {
+            ENTITY_update(m_PlayerEntity.entitys[i]);
+            COLLISION_resolve_map(m_PlayerEntity.entitys[i], LEVEL_1_MAP[0], BACKGROUND_SPRITE);
+        }
+        for (i = 0; i < m_PlayerEntity.num_player; i++)
+        {
+            DRAW_entity(m_PlayerEntity.entitys[i], false);
+        }
 
         WindowMgr_render();
         FramerateMgr_fix_framerate();
